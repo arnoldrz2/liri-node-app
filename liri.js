@@ -10,12 +10,31 @@ var request = require('request');
 // var spotifyKey = new Spotify(keys.spotify);
 
 // Make it so liri.js can take in one of the following commands:
-console.log("To get started, please enter one of the following commands:
-            'my-tweets', 'spotify-this-song', 'movie-this', 'do-what-it-says'");
+console.log("To get started, please enter one of the following commands: 'my-tweets', 'spotify-this-song', 'movie-this', 'do-what-it-says'");
 
 var command = process.argv[2];
 var input = process.argv[3];
 
+//Switch cases for commands
+switch(command) {
+    case "my-tweets":
+      myTweets();
+    break;
+
+    case "spotify-this-song":
+      spotifyThisSong();
+    break;
+
+    case "movie-this":
+      movieThis();
+    break;
+
+    case "do-what-it-says":
+      doWhatItSays();
+    break;
+}
+
+//Get Tweet Function
 function myTweets(){
     console.log("Social Media Stuff Incoming!");
     //Access keys
