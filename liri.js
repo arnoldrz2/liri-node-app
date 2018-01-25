@@ -34,7 +34,7 @@ var getMyTweets = function(){
     var client = new Twitter(keys);
 
     //Parameters for Twitter Function
-    var params = {screen_name: "roland_arno", count: 20};
+    var params = { screen_name: "roland_arno", count: 20 };
 
     client.get("statuses/user_timeline", params, function(error, tweets, response) {
       if (!error) {
