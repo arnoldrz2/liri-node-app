@@ -6,7 +6,10 @@ var request = require('request');
 var fs = require('fs');
 
 // You should then be able to access your keys information like so
-var spotifyKey = new Spotify(keys);
+var spotify = new Spotify({
+  id: "82a30fef265e4156a21186709dfaa927",
+  secret: "cb131580e64e4bd499f22bd91aaaf43c"
+});
 
 //==============================================================================
 
@@ -17,10 +20,10 @@ var getMyTweets = function(){
     var client = new Twitter(keys);
 
     //Parameters for Twitter Function
-    var params = {screen_name: 'roland_arno'
+    var params = {screen_name: "cnn"
     };
 
-    client.get('statuses/user_timeline', params, function(error, tweets, response) {
+    client.get("statuses/user_timeline", params, function(error, tweets, response) {
       if (!error) {
         for (var i = 0; i < tweets.length; i++) {
           console.log(tweets[i].created_at);
@@ -40,14 +43,11 @@ var getArtistNames = function(artist) {
 // Function for running a Spotify search
 var getMeSpotify = function(songName) {
   if (songName === undefined) {
-    songName = "What's my age again";
+    songName = "Funkytown";
   }
 
-  spotify.search(
-    {
-      type: "track",
-      query: songName
-    },
+  spotify
+  .search({ type: "track", query: songName},
     function(err, data) {
       if (err) {
         console.log("Error occurred: " + err);
