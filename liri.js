@@ -13,29 +13,48 @@ var spotify = new Spotify({
 
 //==============================================================================
 
-//Get Tweet Function
+// Writes to the log.txt file
+var writeToLog = function(data) {
+  fs.appendFile("log.txt", "\r\n\r\n");
+
+  fs.appendFile("log.txt", JSON.stringify(data), function(err) {
+    if (err){
+      return console.log(err);
+    }
+
+    console.log("log.txt updated");
+  });
+};
+
+
+//Function for retrieving tweets
 var getMyTweets = function(){
     console.log("Social Media Stuff Incoming!");
     //Access keys
     var client = new Twitter(keys);
 
     //Parameters for Twitter Function
-    var params = {screen_name: "cnn"
-    };
+    var params = {screen_name: "roland_arno", count: 20};
 
     client.get("statuses/user_timeline", params, function(error, tweets, response) {
       if (!error) {
+        var data = [];
+
         for (var i = 0; i < tweets.length; i++) {
-          console.log(tweets[i].created_at);
-          console.log("");
-          console.log(tweets[i].text);
+          data.push({
+            created_at: tweets[i].created_at,
+            text: tweets[i].text
+          });
         }
+
+        console.log(data);
+        writeToLog(data);
       }
     });
 };
 
 
-// Writes to the log.txt file
+//Function that retrieves artists name from spotify api and makes it a variable
 var getArtistNames = function(artist) {
   return artist.name;
 };
@@ -55,23 +74,27 @@ var getMeSpotify = function(songName) {
       }
 
       var songs = data.tracks.items;
+      var data = [];
 
       for (var i = 0; i < songs.length; i++) {
-        console.log(i);
-        console.log("artist(s): " + songs[i].artists.map(getArtistNames));
-        console.log("song name: " + songs[i].name);
-        console.log("preview song: " + songs[i].preview_url);
-        console.log("album: " + songs[i].album.name);
+        data.push({
+            "artist(s)": songs[i].artists.map(getArtistNames),
+            "song name: ": songs[i].name,
+            "preview song: ": songs[i].preview_url,
+            "album: ": songs[i].album.name
+        });
       }
-    }
-  );
+
+      console.log(data);
+      writeToLog(data);
+    });
 };
 
 
 // Function for running a Movie Search
 var getMeMovie = function(movieName) {
   if (movieName === undefined) {
-    movieName = "Mr Nobody";
+    movieName = "Space Jam";
   }
 
   var urlHit = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=full&tomatoes=true&apikey=trilogy";
@@ -80,15 +103,20 @@ var getMeMovie = function(movieName) {
     if (!error && response.statusCode === 200) {
       var jsonData = JSON.parse(body);
 
-      console.log("Title: " + jsonData.Title);
-      console.log("Year: " + jsonData.Year);
-      console.log("Rated: " + jsonData.Rated);
-      console.log("IMDB Rating: " + jsonData.imdbRating);
-      console.log("Country: " + jsonData.Country);
-      console.log("Language: " + jsonData.Language);
-      console.log("Plot: " + jsonData.Plot);
-      console.log("Actors: " + jsonData.Actors);
-      console.log("Rotton Tomatoes URL: " + jsonData.tomatoURL);
+      var data = {
+        "Title: ": jsonData.Title,
+        "Year: ": jsonData.Year,
+        "Rated: ": jsonData.Rated,
+        "IMDB Rating: ": jsonData.imdbRating,
+        "Country: ": jsonData.Country,
+        "Language: ": jsonData.Language,
+        "Plot: ": jsonData.Plot,
+        "Actors: ": jsonData.Actors,
+        "Rotton Tomatoes URL: ": jsonData.tomatoURL
+      };
+
+      console.log(data);
+      writeToLog(data);
     }
   });
 };
